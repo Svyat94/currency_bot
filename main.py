@@ -16,8 +16,10 @@ def start(message):
     markup = telebot.types.ReplyKeyboardMarkup(row_width=2)
     itembtn1 = telebot.types.KeyboardButton('USD')
     itembtn2 = telebot.types.KeyboardButton('EUR')
-    markup.add(itembtn1, itembtn2)
-    bot.send_message(chat_id=message.chat.id, text='<b>Привет! Выбери курс валют!</b>', reply_markup=markup, parse_mode='html')
+    itembtn3 = telebot.types.KeyboardButton('CNY')
+    itembtn4 = telebot.types.KeyboardButton('KZT')
+    markup.add(itembtn1, itembtn2, itembtn3, itembtn4)
+    bot.send_message(chat_id=message.chat.id, text=f'<b>Привет {message.from_user.first_name} {message.from_user.last_name}! Выбери курс валют!</b>', reply_markup=markup, parse_mode='html')
 
 def user_name():
     pass
@@ -26,7 +28,7 @@ def user_name():
 def message(message):
     message_norm = message.text.strip().lower()
 
-    if message_norm in ['usd', 'eur']:
+    if message_norm in ['usd', 'eur', 'cny', 'kzt']:
         rates = ExchangeRates(datetime.now())
         bot.send_message(chat_id=message.chat.id, text=f'<b>Курс {message_norm.upper()} = {float(rates[message_norm.upper()].rate)} рублей</b>', parse_mode='html')
 
