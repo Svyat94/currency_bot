@@ -11,6 +11,7 @@ load_dotenv()
 YOUR_BOT_TOKEN = os.getenv("YOUR_BOT_TOKEN")
 bot = telebot.TeleBot(YOUR_BOT_TOKEN)
 
+
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = telebot.types.ReplyKeyboardMarkup(row_width=2)
@@ -21,8 +22,6 @@ def start(message):
     markup.add(itembtn1, itembtn2, itembtn3, itembtn4)
     bot.send_message(chat_id=message.chat.id, text=f'<b>Привет {message.from_user.first_name} {message.from_user.last_name}! Выбери курс валют!</b>', reply_markup=markup, parse_mode='html')
 
-def user_name():
-    pass
 
 @bot.message_handler(content_types=['text'])
 def message(message):
@@ -31,5 +30,6 @@ def message(message):
     if message_norm in ['usd', 'eur', 'cny', 'kzt']:
         rates = ExchangeRates(datetime.now())
         bot.send_message(chat_id=message.chat.id, text=f'<b>Курс {message_norm.upper()} = {float(rates[message_norm.upper()].rate)} рублей</b>', parse_mode='html')
+
 
 bot.polling(non_stop=True)
