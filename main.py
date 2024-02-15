@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv
 from datetime import datetime
 import telebot
@@ -7,6 +8,12 @@ from pycbrf import ExchangeRates
 
 load_dotenv()
 
+# Настройка логирования
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+    filename="bot.log",
+)
 
 YOUR_BOT_TOKEN = os.getenv("YOUR_BOT_TOKEN")
 bot = telebot.TeleBot(YOUR_BOT_TOKEN)
@@ -21,6 +28,11 @@ def start(message):
         text=f"<b>Привет {message.from_user.first_name} {message.from_user.last_name}! Я Бот, который тебе поможет с конвертацие валют. Выбери предложенный курс!</b>",
         reply_markup=markup,
         parse_mode="html",
+    )
+
+    # Логирование начала работы с ботом
+    logging.info(
+        f"Пользователь {message.from_user.first_name} {message.from_user.last_name} начал работу с ботом"
     )
 
 
@@ -111,7 +123,7 @@ def convert_currency(message, currency):
     except ValueError:
         bot.send_message(
             chat_id=message.chat.id,
-            text="Введите корректную сумму для конвертации.",
+            text="Введите корректную сумму для конвертации. Для этого нужно вводить сумму таким образом, например, '100.50' без кавычек, если число не целое или '100' без кавычек, если целое число. Попробуйте заново /start",
         )
 
 
